@@ -20,16 +20,31 @@ module.exports = ({ production } = {}) => ({
   output: {
     path: production ? `${outDir}/bundle` : `${outDir}/bundle-dev`, // includes sourcemap
     publicPath: baseUrl,
-    filename: 'slickgrid-vanilla-bundle.js',
-    sourceMapFilename: 'slickgrid-vanilla-bundle.js.map',
+    filename: 'slickgrid-excelExport-vanilla-bundle.js',
+    sourceMapFilename: 'slickgrid-excelExport-vanilla-bundle.js.map',
     libraryTarget: 'umd',
     library: 'Slickgrid-Universal',
     umdNamedDefine: true,
   },
+  externals: [
+    {
+      jquery: 'jQuery',
+      //jszip: 'jszip',
+      //"moment-mini":"moment-mini",
+    },
+    /jquery-ui/i,
+  ],
   resolve: {
     extensions: ['.ts', '.js'],
     modules: [srcDir, 'node_modules'],
     mainFields: production ? ['module', 'main'] : ['browser', 'module', 'main'],
+    fallback: {
+      http: false,
+      https: false,
+      stream: false,
+      util: false,
+      zlib: false,
+    }
   },
   module: {
     rules: [
