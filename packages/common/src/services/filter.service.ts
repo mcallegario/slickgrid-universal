@@ -167,7 +167,7 @@ export class FilterService {
     });
 
     // destroy Filter(s) to avoid leak and not keep orphan filters in the DOM tree
-    this.subscribeToOnHeaderRowCellRendered(grid);
+    // this.subscribeToOnHeaderRowCellRendered(grid);
 
     // subscribe to the SlickGrid event and call the backend execution
     if (this._onSearchChange) {
@@ -223,7 +223,7 @@ export class FilterService {
     });
 
     // destroy Filter(s) to avoid leak and not keep orphan filters
-    this.subscribeToOnHeaderRowCellRendered(grid);
+    // this.subscribeToOnHeaderRowCellRendered(grid);
   }
 
   async clearFilterByColumnId(event: Event, columnId: number | string): Promise<boolean> {
