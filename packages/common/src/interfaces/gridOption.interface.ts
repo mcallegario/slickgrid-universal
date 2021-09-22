@@ -456,10 +456,10 @@ export interface GridOption {
   headerMenu?: HeaderMenu;
 
   /**
-   * Defaults to false, should we ignore any accent while filtering text?
+   * Defaults to false, should we ignore any accent while filtering and sorting text?
    * For example if our text is "José" and we type "Jose" then it won't return unless we use this flag because "é" is not equal to "e"
    */
-  ignoreAccentOnStringFilter?: boolean;
+  ignoreAccentOnStringFilterAndSort?: boolean;
 
   /**
    * Defaults to false, should we ignore any accent while sorting text?
