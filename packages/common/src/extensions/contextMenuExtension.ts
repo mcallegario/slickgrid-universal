@@ -427,18 +427,17 @@ export class ContextMenuExtension implements Extension {
         }
 
         // remove any unwanted Tree Data/Grouping symbols from the beginning of the string before copying (e.g.: "⮟  Task 21" or "·   Task 2")
-        const finalTextToCopy = textToCopy.replace(/^([·|⮞|⮟]\s*)|([·|⮞|⮟])\s*/g, '');
+        const finalTextToCopy = textToCopy.replace(/^([·|⮞|⮟]\s*)|([·|⮞|⮟])\s*/gi, '').replace(/\u034f/gi, '').trim();
 
         // create fake <textarea> (positioned outside of the screen) to copy into clipboard & delete it from the DOM once we're done
         const tmpElem = document.createElement('textarea') as HTMLTextAreaElement;
         if (tmpElem && document.body) {
           tmpElem.style.position = 'absolute';
-          tmpElem.style.left = '-1000px';
-          tmpElem.style.top = '-1000px';
+          tmpElem.style.opacity = '0';
           tmpElem.value = finalTextToCopy;
           document.body.appendChild(tmpElem);
           tmpElem.select();
-          const success = document.execCommand('copy', false, textToCopy);
+          const success = document.execCommand('copy', false, finalTextToCopy);
           if (success) {
             tmpElem.remove();
           }

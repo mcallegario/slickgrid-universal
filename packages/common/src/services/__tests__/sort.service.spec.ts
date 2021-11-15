@@ -226,7 +226,7 @@ describe('SortService', () => {
       setTimeout(() => {
         expect(previousSortSpy).toHaveBeenCalled();
         expect(localSortSpy).toHaveBeenNthCalledWith(1, gridStub, [], true, true);
-        expect(localSortSpy).toHaveBeenNthCalledWith(2, gridStub, [{ columnId: 'id', clearSortTriggered: true, sortAsc: true, sortCol: { field: 'id', id: 'id' } }]);
+        expect(localSortSpy).toHaveBeenNthCalledWith(2, gridStub, [{ columnId: 'id', clearSortTriggered: true, sortAsc: true, sortCol: { field: 'id', id: 'id' } }], false, true);
         expect(emitSortChangedSpy).toHaveBeenCalledWith('local', []);
         expect(setSortSpy).toHaveBeenCalled();
         expect(sortDefaultSpy).toHaveBeenCalled();
@@ -252,7 +252,7 @@ describe('SortService', () => {
         expect(previousSortSpy).toHaveBeenCalled();
         expect(localSortSpy).toHaveBeenNthCalledWith(1, gridStub, [], true, true);
         expect(emitSortChangedSpy).toHaveBeenCalledWith('local', []);
-        expect(localSortSpy).toHaveBeenNthCalledWith(2, gridStub, [{ columnId: 'customId', clearSortTriggered: true, sortAsc: true, sortCol: { field: 'customId', id: 'customId' } }]);
+        expect(localSortSpy).toHaveBeenNthCalledWith(2, gridStub, [{ columnId: 'customId', clearSortTriggered: true, sortAsc: true, sortCol: { field: 'customId', id: 'customId' } }], false, true);
         expect(setSortSpy).toHaveBeenCalled();
         expect(sortDefaultSpy).toHaveBeenCalled();
         done();
@@ -1155,6 +1155,19 @@ describe('SortService', () => {
           },
         ] as any;
         sharedService.hierarchicalDataset = dataset;
+      });
+
+      it('should sort the hierarchical dataset and expect event emitted when passing True as 3rd argument', () => {
+        const pubSubSpy = jest.spyOn(pubSubServiceStub, 'publish');
+        const sortTreeDataSpy = jest.spyOn(service, 'sortTreeData');
+        const emitSortChangedSpy = jest.spyOn(service, 'emitSortChanged');
+
+        const result = service.sortHierarchicalDataset(dataset, [{ columnId: 'file', sortAsc: true, sortCol: mockColumns[0] }], true);
+
+        expect(result).toBeTruthy();
+        expect(pubSubSpy).toHaveBeenCalledWith('onSortChanged', [{ columnId: 'file', direction: 'ASC' }]);
+        expect(sortTreeDataSpy).toHaveBeenCalled();
+        expect(emitSortChangedSpy).toHaveBeenCalled();
       });
 
       it('should call onLocalSortChanged with a hierarchical dataset and expect DataView "setItems" method be called once with sorted ASC dataset', (done) => {
