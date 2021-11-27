@@ -352,6 +352,9 @@ export interface GridOption {
   /** Do we want to enable row selection? */
   enableRowSelection?: boolean;
 
+  /** Do we want to enable Sanitize Html */
+  enableSanitizeHtml?: boolean;
+
   /** Do we want to enable sorting? */
   enableSorting?: boolean;
 
