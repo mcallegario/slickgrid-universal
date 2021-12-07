@@ -319,6 +319,7 @@ export class Example11 {
       },
       enableContextMenu: true,
       contextMenu: {
+        hideCloseButton: false,
         commandItems: [
           {
             command: 'modal',

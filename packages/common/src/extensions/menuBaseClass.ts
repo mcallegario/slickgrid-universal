@@ -19,7 +19,7 @@ import { ExtensionUtility } from '../extensions/extensionUtility';
 import { PubSubService } from '../services/pubSub.service';
 import { SharedService } from '../services/shared.service';
 import { createDomElement } from '../services/domUtilities';
-import { hasData, toSentenceCase } from '../services/utilities';
+import { hasData } from '../services/utilities';
 
 // using external SlickGrid JS libraries
 declare const Slick: SlickNamespace;
@@ -38,12 +38,13 @@ export class MenuBaseClass<M extends CellMenu | ContextMenu | GridMenu | HeaderM
   protected _addonOptions: M = {} as unknown as M;
   protected _bindEventService: BindingEventService;
   protected _camelPluginName = '';
-  protected _commandTitleElm?: HTMLDivElement;
+  protected _commandTitleElm?: HTMLSpanElement;
   protected _eventHandler: SlickEventHandler;
   protected _gridUid = '';
   protected _menuElm?: HTMLDivElement | null;
   protected _menuCssPrefix = '';
-  protected _optionTitleElm?: HTMLDivElement;
+  protected _menuPluginCssPrefix = '';
+  protected _optionTitleElm?: HTMLSpanElement;
 
   /** Constructor of the SlickGrid 3rd party plugin, it can optionally receive options */
   constructor(
@@ -83,12 +84,7 @@ export class MenuBaseClass<M extends CellMenu | ContextMenu | GridMenu | HeaderM
   }
 
   get menuElement(): HTMLDivElement | null {
-    return this._menuElm || document.querySelector(`.${this._menuCssPrefix}${this.gridUidSelector}`);
-  }
-
-  /** @deprecated @use `dispose` Destroy plugin. */
-  destroy() {
-    this.dispose();
+    return this._menuElm || document.querySelector(`.${this._menuPluginCssPrefix || this._menuCssPrefix}${this.gridUidSelector}`);
   }
 
   /** Dispose (destroy) of the plugin */
@@ -119,15 +115,17 @@ export class MenuBaseClass<M extends CellMenu | ContextMenu | GridMenu | HeaderM
     itemClickCallback: (event: DOMMouseEvent<HTMLDivElement>, type: MenuType, item: ExtractMenuType<ExtendableItemTypes, MenuType>, columnDef?: Column) => void
   ) {
     if (args && commandOrOptionItems && menuOptions) {
+      const menuHeaderElm = this._menuElm?.querySelector(`.slick-${itemType}-header`) ?? createDomElement('div', { className: `slick-${itemType}-header` });
       // user could pass a title on top of the Commands/Options section
-      const titleProp = itemType === 'command' ? 'commandTitle' : 'optionTitle';
+      const titleProp: 'commandTitle' | 'optionTitle' = `${itemType}Title`;
       if ((menuOptions as CellMenu | ContextMenu)?.[titleProp]) {
-        this[`_${itemType}TitleElm`] = createDomElement('div', {
-          className: 'title',
-          textContent: (menuOptions as never)[titleProp],
-        });
-        commandOrOptionMenuElm.appendChild(this[`_${itemType}TitleElm`]!);
+        this[`_${itemType}TitleElm`] = createDomElement('span', { className: 'slick-menu-title', textContent: (menuOptions as never)[titleProp] });
+        menuHeaderElm.appendChild(this[`_${itemType}TitleElm`]!);
+        menuHeaderElm.classList.add('with-title');
+      } else {
+        menuHeaderElm.classList.add('no-title');
       }
+      commandOrOptionMenuElm.appendChild(menuHeaderElm);
       for (const item of commandOrOptionItems) {
         this.populateSingleCommandOrOptionItem(itemType, menuOptions, commandOrOptionMenuElm, item, args, itemClickCallback);
       }
@@ -197,23 +195,15 @@ export class MenuBaseClass<M extends CellMenu | ContextMenu | GridMenu | HeaderM
         commandLiElm.title = item.tooltip;
       }
 
-      if (this._camelPluginName === 'headerButtons') {
-        if ((item as HeaderButtonItem).image) {
-          console.warn('[Slickgrid-Universal] The "image" property of a Header Button is now deprecated and will be removed in future version, consider using "cssClass" instead.');
-          commandLiElm.style.backgroundImage = `url(${(item as HeaderButtonItem).image})`;
-        }
-      } else {
-        // any other Menu plugin will have icon & content elements
+      if (this._camelPluginName !== 'headerButtons') {
+        // Menu plugin can use optional icon & content elements
         const iconElm = createDomElement('div', { className: `${this._menuCssPrefix}-icon` });
         commandLiElm.appendChild(iconElm);
 
         if ((item as MenuCommandItem | MenuOptionItem).iconCssClass) {
           iconElm.classList.add(...(item as MenuCommandItem | MenuOptionItem).iconCssClass!.split(' '));
-        }
-
-        if ((item as MenuCommandItem | MenuOptionItem).iconImage) {
-          console.warn(`[Slickgrid-Universal] The "iconImage" property of a ${toSentenceCase(this._camelPluginName)} item is now deprecated and will be removed in future version, consider using "iconCssClass" instead.`);
-          iconElm.style.backgroundImage = `url(${(item as MenuCommandItem | MenuOptionItem).iconImage})`;
+        } else {
+          iconElm.textContent = '◦';
         }
 
         const textElm = createDomElement('span', {

@@ -41,8 +41,6 @@ export class SlickContextMenu extends MenuFromCellBaseClass<ContextMenu> {
     autoAdjustDropOffset: 0,
     autoAlignSideOffset: 0,
     hideMenuOnScroll: false,
-    maxHeight: 'none',
-    width: 'auto',
     optionShownOverColumnIds: [],
     commandShownOverColumnIds: [],
   } as unknown as ContextMenuOption;
@@ -57,7 +55,8 @@ export class SlickContextMenu extends MenuFromCellBaseClass<ContextMenu> {
   ) {
     super(extensionUtility, pubSubService, sharedService);
     this._camelPluginName = 'contextMenu';
-    this._menuCssPrefix = 'slick-context-menu';
+    this._menuCssPrefix = 'slick-menu';
+    this._menuPluginCssPrefix = 'slick-context-menu';
     this.init(sharedService.gridOptions.contextMenu);
   }
 

@@ -56,7 +56,8 @@ export class SlickHeaderMenu extends MenuBaseClass<HeaderMenu> {
     protected readonly sortService: SortService,
   ) {
     super(extensionUtility, pubSubService, sharedService);
-    this._menuCssPrefix = 'slick-header-menu';
+    this._menuCssPrefix = 'slick-menu';
+    this._menuPluginCssPrefix = 'slick-header-menu';
     this._camelPluginName = 'headerMenu';
     this.sharedService.gridOptions.headerMenu = this.addHeaderMenuCustomCommands(this.sharedService.columnDefinitions);
     this.init(sharedService.gridOptions.headerMenu);
@@ -79,11 +80,6 @@ export class SlickHeaderMenu extends MenuBaseClass<HeaderMenu> {
 
     // hide the menu when clicking outside the grid
     this._bindEventService.bind(document.body, 'mousedown', this.handleBodyMouseDown.bind(this) as EventListener);
-  }
-
-  /** @deprecated @use `dispose` Destroy plugin. */
-  destroy() {
-    this.dispose();
   }
 
   /** Dispose (destroy) of the plugin */
@@ -184,10 +180,6 @@ export class SlickHeaderMenu extends MenuBaseClass<HeaderMenu> {
 
       if (this.addonOptions.buttonCssClass) {
         headerButtonDivElm.classList.add(...this.addonOptions.buttonCssClass.split(' '));
-      }
-
-      if (this.addonOptions.buttonImage) {
-        headerButtonDivElm.style.backgroundImage = `url(${this.addonOptions.buttonImage})`;
       }
 
       if (this.addonOptions.tooltip) {

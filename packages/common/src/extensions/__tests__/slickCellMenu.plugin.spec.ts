@@ -29,6 +29,7 @@ const gridOptionsMock = {
     autoAlignSideOffset: 0,
     hideMenuOnScroll: true,
     maxHeight: 'none',
+    maxWidth: 'none',
     width: 175,
     onExtensionRegistered: jest.fn(),
     onCommand: () => { },
@@ -141,12 +142,6 @@ describe('CellMenu Plugin', () => {
     expect(plugin.eventHandler).toBeTruthy();
   });
 
-  it('should dispose of the addon', () => {
-    const disposeSpy = jest.spyOn(plugin, 'dispose');
-    plugin.destroy();
-    expect(disposeSpy).toHaveBeenCalled();
-  });
-
   it('should use default options when instantiating the plugin without passing any arguments', () => {
     plugin.init();
 
@@ -156,8 +151,6 @@ describe('CellMenu Plugin', () => {
       autoAdjustDropOffset: 0,
       autoAlignSideOffset: 0,
       hideMenuOnScroll: true,
-      maxHeight: 'none',
-      width: 'auto',
     });
   });
 
@@ -267,31 +260,31 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
 
         expect(cellMenuElm.classList.contains('dropdown'));
         expect(cellMenuElm.classList.contains('dropright'));
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(removeExtraSpaces(document.body.innerHTML)).toBe(removeExtraSpaces(
-          `<div style="display: block; width: auto; max-height: none; top: 0px; left: 0px;" class="slick-cell-menu slickgrid12345 dropdown dropright" aria-expanded="true">
-            <button class="close" type="button" data-dismiss="slick-cell-menu" aria-label="Close">
-              <span class="close" aria-hidden="true">×</span>
-            </button>
-            <div class="slick-cell-menu-command-list">
-              <li class="slick-cell-menu-item orange" data-command="command1">
-                <div class="slick-cell-menu-icon"></div>
-                <span class="slick-cell-menu-content">Command 1</span>
+          `<div class="slick-cell-menu slickgrid12345 dropdown dropright" style="display: block; top: 0px; left: 0px;" aria-expanded="true">
+            <div class="slick-menu-command-list">
+              <div class="slick-command-header with-close no-title">
+                <button class="close" type="button" data-dismiss="slick-menu" aria-label="Close">×</button>
+              </div>
+              <li class="slick-menu-item orange" data-command="command1">
+                <div class="slick-menu-icon">◦</div>
+                <span class="slick-menu-content">Command 1</span>
               </li>
-              <li class="slick-cell-menu-item" data-command="command2">
-                <div class="slick-cell-menu-icon"></div>
-                <span class="slick-cell-menu-content">Command 2</span>
+              <li class="slick-menu-item" data-command="command2">
+                <div class="slick-menu-icon">◦</div>
+                <span class="slick-menu-content">Command 2</span>
               </li>
-              <li class="slick-cell-menu-item slick-cell-menu-item-divider"></li>
-              <li class="slick-cell-menu-item red" data-command="delete-row">
-                <div class="slick-cell-menu-icon mdi mdi-close"></div>
-                <span class="slick-cell-menu-content bold">Delete Row</span>
+              <li class="slick-menu-item slick-menu-item-divider"></li>
+              <li class="slick-menu-item red" data-command="delete-row">
+                <div class="slick-menu-icon mdi mdi-close"></div>
+                <span class="slick-menu-content bold">Delete Row</span>
               </li>
-              <li class="slick-cell-menu-item slick-cell-menu-item-divider"></li>
+              <li class="slick-menu-item slick-menu-item-divider"></li>
           </div>
         </div>`));
       });
@@ -305,22 +298,22 @@ describe('CellMenu Plugin', () => {
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
         const closeBtnElm = cellMenuElm.querySelector('.close') as HTMLButtonElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
-        const commandItemElm1 = commandListElm.querySelectorAll('.slick-cell-menu-item')[0] as HTMLDivElement;
-        const commandItemElm2 = commandListElm.querySelectorAll('.slick-cell-menu-item')[1] as HTMLDivElement;
-        const commandItemElm3 = commandListElm.querySelectorAll('.slick-cell-menu-item')[2] as HTMLDivElement;
-        const commandLabelElm1 = commandItemElm1.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const commandIconElm1 = commandItemElm1.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
-        const commandLabelElm3 = commandItemElm3.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const commandIconElm3 = commandItemElm3.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
+        const commandItemElm1 = commandListElm.querySelectorAll('.slick-menu-item')[0] as HTMLDivElement;
+        const commandItemElm2 = commandListElm.querySelectorAll('.slick-menu-item')[1] as HTMLDivElement;
+        const commandItemElm3 = commandListElm.querySelectorAll('.slick-menu-item')[2] as HTMLDivElement;
+        const commandLabelElm1 = commandItemElm1.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const commandIconElm1 = commandItemElm1.querySelector('.slick-menu-icon') as HTMLDivElement;
+        const commandLabelElm3 = commandItemElm3.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const commandIconElm3 = commandItemElm3.querySelector('.slick-menu-icon') as HTMLDivElement;
 
         expect(plugin.menuElement).toBeTruthy();
         expect(closeBtnElm).toBeTruthy();
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(4);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(4);
         expect(commandItemElm1.classList.contains('orange')).toBeTruthy();
-        expect(commandIconElm1.className).toBe('slick-cell-menu-icon');
+        expect(commandIconElm1.className).toBe('slick-menu-icon');
         expect(commandLabelElm1.textContent).toBe('Command 1');
-        expect(commandItemElm2.classList.contains('slick-cell-menu-item-divider')).toBeTruthy();
+        expect(commandItemElm2.classList.contains('slick-menu-item-divider')).toBeTruthy();
         expect(commandItemElm2.innerHTML).toBe('');
         expect(commandIconElm3.classList.contains('mdi-close')).toBeTruthy();
         expect(commandLabelElm3.textContent).toBe('Delete Row');
@@ -328,44 +321,48 @@ describe('CellMenu Plugin', () => {
 
       it('should expect a Cell Menu to be created when cell is clicked with a list of commands defined but without "Command 1" when "itemVisibilityOverride" and "itemUsabilityOverride" return false', () => {
         plugin.dispose();
-        plugin.init();
+        plugin.init({ maxHeight: 290, width: 400 });
         (columnsMock[3].cellMenu.commandItems[1] as MenuCommandItem).itemVisibilityOverride = () => false;
         (columnsMock[3].cellMenu.commandItems[1] as MenuCommandItem).itemUsabilityOverride = () => false;
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
         const closeBtnElm = cellMenuElm.querySelector('.close') as HTMLButtonElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
-        const commandItemElm1 = commandListElm.querySelectorAll('.slick-cell-menu-item')[0] as HTMLDivElement;
-        const commandLabelElm1 = commandItemElm1.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const commandIconElm1 = commandItemElm1.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
+        const commandItemElm1 = commandListElm.querySelectorAll('.slick-menu-item')[0] as HTMLDivElement;
+        const commandLabelElm1 = commandItemElm1.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const commandIconElm1 = commandItemElm1.querySelector('.slick-menu-icon') as HTMLDivElement;
 
         expect(closeBtnElm).toBeTruthy();
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(4);
+        expect(cellMenuElm.style.maxHeight).toBe('290px');
+        expect(cellMenuElm.style.width).toBe('400px');
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(4);
         expect(commandItemElm1.classList.contains('orange')).toBeTruthy();
-        expect(commandIconElm1.className).toBe('slick-cell-menu-icon');
+        expect(commandIconElm1.className).toBe('slick-menu-icon');
         expect(commandLabelElm1.textContent).toBe('Command 1');
         expect(document.body.innerHTML.includes('Command 2')).not.toBeTruthy();
       });
 
       it('should create a Cell Menu and a 2nd button item usability callback returns false and expect button to be disabled', () => {
         plugin.dispose();
-        plugin.init();
+        plugin.init({ maxWidth: 310, width: 'auto' });
         (columnsMock[3].cellMenu.commandItems[1] as MenuCommandItem).itemVisibilityOverride = () => true;
         (columnsMock[3].cellMenu.commandItems[1] as MenuCommandItem).itemUsabilityOverride = () => false;
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
         const closeBtnElm = cellMenuElm.querySelector('.close') as HTMLButtonElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
-        const commandItemElm1 = commandListElm.querySelectorAll('.slick-cell-menu-item')[0] as HTMLDivElement;
-        const commandLabelElm1 = commandItemElm1.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const commandIconElm1 = commandItemElm1.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
+        const commandItemElm1 = commandListElm.querySelectorAll('.slick-menu-item')[0] as HTMLDivElement;
+        const commandLabelElm1 = commandItemElm1.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const commandIconElm1 = commandItemElm1.querySelector('.slick-menu-icon') as HTMLDivElement;
 
         expect(closeBtnElm).toBeTruthy();
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(cellMenuElm.style.maxWidth).toBe('310px');
+        expect(cellMenuElm.style.width).toBe('auto');
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandItemElm1.classList.contains('orange')).toBeTruthy();
-        expect(commandIconElm1.className).toBe('slick-cell-menu-icon');
+        expect(commandIconElm1.className).toBe('slick-menu-icon');
         expect(commandLabelElm1.textContent).toBe('Command 1');
         expect(document.body.innerHTML.includes('Command 2')).toBeTruthy();
       });
@@ -377,13 +374,13 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         const commandItemElm2 = commandListElm.querySelector('[data-command="command2"]') as HTMLDivElement;
-        const commandContentElm2 = commandItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const commandContentElm2 = commandItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandContentElm2.textContent).toBe('Command 2');
-        expect(commandItemElm2.classList.contains('slick-cell-menu-item-disabled')).toBeTruthy();
+        expect(commandItemElm2.classList.contains('slick-menu-item-disabled')).toBeTruthy();
       });
 
       it('should create a Cell Menu and expect button to be disabled when command property is hidden', () => {
@@ -393,31 +390,13 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         const commandItemElm2 = commandListElm.querySelector('[data-command="command2"]') as HTMLDivElement;
-        const commandContentElm2 = commandItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const commandContentElm2 = commandItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandContentElm2.textContent).toBe('Command 2');
-        expect(commandItemElm2.classList.contains('slick-cell-menu-item-hidden')).toBeTruthy();
-      });
-
-      it('should create a Cell Menu with an icon having a background image when property "iconImage" is filled', () => {
-        plugin.dispose();
-        plugin.init();
-        (columnsMock[3].cellMenu.commandItems[1] as MenuCommandItem).iconImage = '/images/some-image.png';
-        gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
-
-        const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
-        const commandItemElm2 = commandListElm.querySelector('[data-command="command2"]') as HTMLDivElement;
-        const commandContentElm2 = commandItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
-        const commandIconElm2 = commandItemElm2.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
-
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
-        expect(commandContentElm2.textContent).toBe('Command 2');
-        expect(commandIconElm2.style.backgroundImage).toBe('url(/images/some-image.png)');
-        expect(consoleWarnSpy).toHaveBeenCalledWith('[Slickgrid-Universal] The "iconImage" property of a Cell Menu item is now deprecated and will be removed in future version, consider using "iconCssClass" instead.');
+        expect(commandItemElm2.classList.contains('slick-menu-item-hidden')).toBeTruthy();
       });
 
       it('should create a Cell Menu item with "iconCssClass" and expect extra css classes added to the icon element', () => {
@@ -427,12 +406,12 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         const commandItemElm2 = commandListElm.querySelector('[data-command="command2"]') as HTMLDivElement;
-        const commandContentElm2 = commandItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
-        const commandIconElm2 = commandItemElm2.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const commandContentElm2 = commandItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
+        const commandIconElm2 = commandItemElm2.querySelector('.slick-menu-icon') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandContentElm2.textContent).toBe('Command 2');
         expect(commandIconElm2.classList.contains('bold')).toBeTruthy();
         expect(commandIconElm2.classList.contains('red')).toBeTruthy();
@@ -446,11 +425,11 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         const commandItemElm2 = commandListElm.querySelector('[data-command="command2"]') as HTMLDivElement;
-        const commandContentElm2 = commandItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const commandContentElm2 = commandItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandContentElm2.textContent).toBe('Help');
         expect(commandContentElm2.classList.contains('italic')).toBeTruthy();
         expect(commandContentElm2.classList.contains('blue')).toBeTruthy();
@@ -463,11 +442,11 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         const commandItemElm2 = commandListElm.querySelector('[data-command="command2"]') as HTMLDivElement;
-        const commandContentElm2 = commandItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const commandContentElm2 = commandItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandContentElm2.textContent).toBe('Command 2');
         expect(commandItemElm2.title).toBe('some tooltip');
       });
@@ -480,10 +459,10 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
-        const commandListTitleElm = commandListElm.querySelector('.title') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
+        const commandListTitleElm = commandListElm.querySelector('.slick-menu-title') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandListTitleElm.textContent).toBe('The Commands!');
       });
 
@@ -499,12 +478,12 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         const commandItemElm = commandListElm.querySelector('[data-command="help"]') as HTMLDivElement;
-        const commandContentElm = commandItemElm.querySelector('.slick-cell-menu-content') as HTMLDivElement;
-        const commandListTitleElm = commandListElm.querySelector('.title') as HTMLDivElement;
+        const commandContentElm = commandItemElm.querySelector('.slick-menu-content') as HTMLDivElement;
+        const commandListTitleElm = commandListElm.querySelector('.slick-menu-title') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(commandListTitleElm.textContent).toBe('Commandes');
         expect(commandContentElm.textContent).toBe('Aide');
       });
@@ -536,9 +515,9 @@ describe('CellMenu Plugin', () => {
         plugin.closeMenu(new Event('click') as any, {} as any);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(onBeforeSpy).toHaveBeenCalled();
         expect(hideSpy).not.toHaveBeenCalled();
       });
@@ -581,9 +560,9 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(onBeforeSpy).toHaveBeenCalled();
         expect(onAfterSpy).toHaveBeenCalled();
       });
@@ -597,10 +576,10 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 3, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         commandListElm.querySelector('[data-command="command2"]').dispatchEvent(new Event('click'));
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(actionMock).toHaveBeenCalled();
       });
 
@@ -613,10 +592,10 @@ describe('CellMenu Plugin', () => {
         plugin.addonOptions.onCommand = onCommandMock;
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const commandListElm = cellMenuElm.querySelector('.slick-cell-menu-command-list') as HTMLDivElement;
+        const commandListElm = cellMenuElm.querySelector('.slick-menu-command-list') as HTMLDivElement;
         commandListElm.querySelector('[data-command="command2"]').dispatchEvent(new Event('click'));
 
-        expect(commandListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(commandListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(onCommandMock).toHaveBeenCalled();
       });
 
@@ -658,29 +637,29 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(removeExtraSpaces(document.body.innerHTML)).toBe(removeExtraSpaces(
-          `<div style="display: block; width: auto; max-height: none; top: 0px; left: 0px;" class="slick-cell-menu slickgrid12345 dropdown dropright" aria-expanded="true">
-            <button class="close" type="button" data-dismiss="slick-cell-menu" aria-label="Close">
-              <span class="close" aria-hidden="true">×</span>
-            </button>
-            <div class="slick-cell-menu-option-list">
-              <li class="slick-cell-menu-item purple" data-option="option1">
-                <div class="slick-cell-menu-icon"></div>
-                <span class="slick-cell-menu-content">Option 1</span>
+          `<div class="slick-cell-menu slickgrid12345 dropdown dropright" style="display: block; top: 0px; left: 0px;" aria-expanded="true">
+            <div class="slick-menu-option-list">
+              <div class="slick-option-header with-close no-title">
+                <button class="close" type="button" data-dismiss="slick-menu" aria-label="Close">×</button>
+              </div>
+              <li class="slick-menu-item purple" data-option="option1">
+                <div class="slick-menu-icon">◦</div>
+                <span class="slick-menu-content">Option 1</span>
               </li>
-              <li class="slick-cell-menu-item" data-option="option2">
-                <div class="slick-cell-menu-icon"></div>
-                <span class="slick-cell-menu-content">Option 2</span>
+              <li class="slick-menu-item" data-option="option2">
+                <div class="slick-menu-icon">◦</div>
+                <span class="slick-menu-content">Option 2</span>
               </li>
-              <li class="slick-cell-menu-item slick-cell-menu-item-divider"></li>
-              <li class="slick-cell-menu-item sky" data-option="delete-row">
-                <div class="slick-cell-menu-icon mdi mdi-checked"></div>
-                <span class="slick-cell-menu-content underline">Delete Row</span>
+              <li class="slick-menu-item slick-menu-item-divider"></li>
+              <li class="slick-menu-item sky" data-option="delete-row">
+                <div class="slick-menu-icon mdi mdi-checked"></div>
+                <span class="slick-menu-content underline">Delete Row</span>
               </li>
-              <li class="slick-cell-menu-item slick-cell-menu-item-divider"></li>
+              <li class="slick-menu-item slick-menu-item-divider"></li>
           </div>
         </div>`));
       });
@@ -694,22 +673,22 @@ describe('CellMenu Plugin', () => {
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
         const closeBtnElm = cellMenuElm.querySelector('.close') as HTMLButtonElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
-        const optionItemElm1 = optionListElm.querySelectorAll('.slick-cell-menu-item')[0] as HTMLDivElement;
-        const optionItemElm2 = optionListElm.querySelectorAll('.slick-cell-menu-item')[1] as HTMLDivElement;
-        const optionItemElm3 = optionListElm.querySelectorAll('.slick-cell-menu-item')[2] as HTMLDivElement;
-        const optionLabelElm1 = optionItemElm1.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const optionIconElm1 = optionItemElm1.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
-        const optionLabelElm3 = optionItemElm3.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const optionIconElm3 = optionItemElm3.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
+        const optionItemElm1 = optionListElm.querySelectorAll('.slick-menu-item')[0] as HTMLDivElement;
+        const optionItemElm2 = optionListElm.querySelectorAll('.slick-menu-item')[1] as HTMLDivElement;
+        const optionItemElm3 = optionListElm.querySelectorAll('.slick-menu-item')[2] as HTMLDivElement;
+        const optionLabelElm1 = optionItemElm1.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const optionIconElm1 = optionItemElm1.querySelector('.slick-menu-icon') as HTMLDivElement;
+        const optionLabelElm3 = optionItemElm3.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const optionIconElm3 = optionItemElm3.querySelector('.slick-menu-icon') as HTMLDivElement;
 
         expect(plugin.menuElement).toBeTruthy();
         expect(closeBtnElm).toBeTruthy();
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(4);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(4);
         expect(optionItemElm1.classList.contains('purple')).toBeTruthy();
-        expect(optionIconElm1.className).toBe('slick-cell-menu-icon');
+        expect(optionIconElm1.className).toBe('slick-menu-icon');
         expect(optionLabelElm1.textContent).toBe('Option 1');
-        expect(optionItemElm2.classList.contains('slick-cell-menu-item-divider')).toBeTruthy();
+        expect(optionItemElm2.classList.contains('slick-menu-item-divider')).toBeTruthy();
         expect(optionItemElm2.innerHTML).toBe('');
         expect(optionIconElm3.classList.contains('mdi-checked')).toBeTruthy();
         expect(optionLabelElm3.textContent).toBe('Delete Row');
@@ -724,15 +703,15 @@ describe('CellMenu Plugin', () => {
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
         const closeBtnElm = cellMenuElm.querySelector('.close') as HTMLButtonElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
-        const optionItemElm1 = optionListElm.querySelectorAll('.slick-cell-menu-item')[0] as HTMLDivElement;
-        const optionLabelElm1 = optionItemElm1.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const optionIconElm1 = optionItemElm1.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
+        const optionItemElm1 = optionListElm.querySelectorAll('.slick-menu-item')[0] as HTMLDivElement;
+        const optionLabelElm1 = optionItemElm1.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const optionIconElm1 = optionItemElm1.querySelector('.slick-menu-icon') as HTMLDivElement;
 
         expect(closeBtnElm).toBeTruthy();
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(4);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(4);
         expect(optionItemElm1.classList.contains('purple')).toBeTruthy();
-        expect(optionIconElm1.className).toBe('slick-cell-menu-icon');
+        expect(optionIconElm1.className).toBe('slick-menu-icon');
         expect(optionLabelElm1.textContent).toBe('Option 1');
         expect(document.body.innerHTML.includes('Option 2')).not.toBeTruthy();
       });
@@ -746,15 +725,15 @@ describe('CellMenu Plugin', () => {
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
         const closeBtnElm = cellMenuElm.querySelector('.close') as HTMLButtonElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
-        const optionItemElm1 = optionListElm.querySelectorAll('.slick-cell-menu-item')[0] as HTMLDivElement;
-        const optionLabelElm1 = optionItemElm1.querySelector('.slick-cell-menu-content') as HTMLSpanElement;
-        const optionIconElm1 = optionItemElm1.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
+        const optionItemElm1 = optionListElm.querySelectorAll('.slick-menu-item')[0] as HTMLDivElement;
+        const optionLabelElm1 = optionItemElm1.querySelector('.slick-menu-content') as HTMLSpanElement;
+        const optionIconElm1 = optionItemElm1.querySelector('.slick-menu-icon') as HTMLDivElement;
 
         expect(closeBtnElm).toBeTruthy();
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionItemElm1.classList.contains('purple')).toBeTruthy();
-        expect(optionIconElm1.className).toBe('slick-cell-menu-icon');
+        expect(optionIconElm1.className).toBe('slick-menu-icon');
         expect(optionLabelElm1.textContent).toBe('Option 1');
         expect(document.body.innerHTML.includes('Option 2')).toBeTruthy();
       });
@@ -766,13 +745,13 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         const optionItemElm2 = optionListElm.querySelector('[data-option="option2"]') as HTMLDivElement;
-        const optionContentElm2 = optionItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const optionContentElm2 = optionItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionContentElm2.textContent).toBe('Option 2');
-        expect(optionItemElm2.classList.contains('slick-cell-menu-item-disabled')).toBeTruthy();
+        expect(optionItemElm2.classList.contains('slick-menu-item-disabled')).toBeTruthy();
       });
 
       it('should create a Cell Menu and expect button to be disabled when option property is hidden', () => {
@@ -782,31 +761,13 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         const optionItemElm2 = optionListElm.querySelector('[data-option="option2"]') as HTMLDivElement;
-        const optionContentElm2 = optionItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const optionContentElm2 = optionItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionContentElm2.textContent).toBe('Option 2');
-        expect(optionItemElm2.classList.contains('slick-cell-menu-item-hidden')).toBeTruthy();
-      });
-
-      it('should create a Cell Menu with an icon having a background image when property "iconImage" is filled', () => {
-        plugin.dispose();
-        plugin.init();
-        (columnsMock[4].cellMenu.optionItems[1] as MenuOptionItem).iconImage = '/images/some-image.png';
-        gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
-
-        const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
-        const optionItemElm2 = optionListElm.querySelector('[data-option="option2"]') as HTMLDivElement;
-        const optionContentElm2 = optionItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
-        const optionIconElm2 = optionItemElm2.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
-
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
-        expect(optionContentElm2.textContent).toBe('Option 2');
-        expect(optionIconElm2.style.backgroundImage).toBe('url(/images/some-image.png)');
-        expect(consoleWarnSpy).toHaveBeenCalledWith('[Slickgrid-Universal] The "iconImage" property of a Cell Menu item is now deprecated and will be removed in future version, consider using "iconCssClass" instead.');
+        expect(optionItemElm2.classList.contains('slick-menu-item-hidden')).toBeTruthy();
       });
 
       it('should create a Cell Menu item with "iconCssClass" and expect extra css classes added to the icon element', () => {
@@ -816,12 +777,12 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         const optionItemElm2 = optionListElm.querySelector('[data-option="option2"]') as HTMLDivElement;
-        const optionContentElm2 = optionItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
-        const optionIconElm2 = optionItemElm2.querySelector('.slick-cell-menu-icon') as HTMLDivElement;
+        const optionContentElm2 = optionItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
+        const optionIconElm2 = optionItemElm2.querySelector('.slick-menu-icon') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionContentElm2.textContent).toBe('Option 2');
         expect(optionIconElm2.classList.contains('underline')).toBeTruthy();
         expect(optionIconElm2.classList.contains('sky')).toBeTruthy();
@@ -835,11 +796,11 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         const optionItemElm2 = optionListElm.querySelector('[data-option="option2"]') as HTMLDivElement;
-        const optionContentElm2 = optionItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const optionContentElm2 = optionItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionContentElm2.textContent).toBe('Help');
         expect(optionContentElm2.classList.contains('italic')).toBeTruthy();
         expect(optionContentElm2.classList.contains('blue')).toBeTruthy();
@@ -852,11 +813,11 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         const optionItemElm2 = optionListElm.querySelector('[data-option="option2"]') as HTMLDivElement;
-        const optionContentElm2 = optionItemElm2.querySelector('.slick-cell-menu-content') as HTMLDivElement;
+        const optionContentElm2 = optionItemElm2.querySelector('.slick-menu-content') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionContentElm2.textContent).toBe('Option 2');
         expect(optionItemElm2.title).toBe('some tooltip');
       });
@@ -870,10 +831,10 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
-        const optionListTitleElm = optionListElm.querySelector('.title') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
+        const optionListTitleElm = optionListElm.querySelector('.slick-menu-title') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionListTitleElm.textContent).toBe('The Options!');
       });
 
@@ -889,12 +850,12 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         const optionItemElm = optionListElm.querySelector('[data-option="none"]') as HTMLDivElement;
-        const optionContentElm = optionItemElm.querySelector('.slick-cell-menu-content') as HTMLDivElement;
-        const optionListTitleElm = optionListElm.querySelector('.title') as HTMLDivElement;
+        const optionContentElm = optionItemElm.querySelector('.slick-menu-content') as HTMLDivElement;
+        const optionListTitleElm = optionListElm.querySelector('.slick-menu-title') as HTMLDivElement;
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(optionListTitleElm.textContent).toBe(`Liste d'options`);
         expect(optionContentElm.textContent).toBe(`Aucun`);
       });
@@ -926,10 +887,10 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         optionListElm.querySelector('[data-option="option2"]').dispatchEvent(new Event('click'));
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(actionMock).toHaveBeenCalled();
       });
 
@@ -943,10 +904,10 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         optionListElm.querySelector('[data-option="option2"]').dispatchEvent(new Event('click'));
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(onOptionSelectedMock).toHaveBeenCalled();
       });
 
@@ -960,10 +921,10 @@ describe('CellMenu Plugin', () => {
         gridStub.onClick.notify({ cell: 4, row: 1, grid: gridStub }, eventData, gridStub);
 
         const cellMenuElm = document.body.querySelector('.slick-cell-menu.slickgrid12345') as HTMLDivElement;
-        const optionListElm = cellMenuElm.querySelector('.slick-cell-menu-option-list') as HTMLDivElement;
+        const optionListElm = cellMenuElm.querySelector('.slick-menu-option-list') as HTMLDivElement;
         optionListElm.querySelector('[data-option="option2"]').dispatchEvent(new Event('click'));
 
-        expect(optionListElm.querySelectorAll('.slick-cell-menu-item').length).toBe(5);
+        expect(optionListElm.querySelectorAll('.slick-menu-item').length).toBe(5);
         expect(onOptionSelectedMock).not.toHaveBeenCalled();
       });
     });

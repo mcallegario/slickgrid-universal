@@ -72,6 +72,7 @@ export class Example7 {
         excludeFromExport: true, excludeFromHeaderMenu: true,
         formatter: () => `<div class="button-style margin-auto" style="width: 35px; margin-top: -1px;"><span class="mdi mdi-chevron-down mdi-22px color-primary"></span></div>`,
         cellMenu: {
+          width: 185,
           commandTitleKey: 'COMMANDS',
           commandItems: [
             {
@@ -220,7 +221,7 @@ export class Example7 {
         rightPadding: 10
       },
       gridMenu: {
-        customTitleKey: 'CUSTOM_COMMANDS',
+        commandTitleKey: 'CUSTOM_COMMANDS',
       },
       autoEdit: true,
       autoCommitEdit: true,

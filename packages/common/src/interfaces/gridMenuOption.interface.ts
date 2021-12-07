@@ -3,7 +3,7 @@ import { Column, GridMenuCallbackArgs, GridMenuCommandItemCallbackArgs, GridMenu
 export interface GridMenuOption {
   /**
    * All the commands text labels
-   * NOTE: some of the text have other properties outside of this option (like 'customTitle', 'forceFitTitle', ...) and that is because they were created prior to this refactoring of labels
+   * NOTE: some of the text have other properties outside of this option (like 'commandTitle', 'forceFitTitle', ...) and that is because they were created prior to this refactoring of labels
    */
   commandLabels?: GridMenuLabel;
 
@@ -13,20 +13,11 @@ export interface GridMenuOption {
   /** Same as "commandTitle", except that it's a translation key which can be used on page load and/or when switching locale */
   commandTitleKey?: string;
 
-  /** Array of Custom Items (title, command, disabled, ...) */
+  /** Array of command items (title, command, disabled, ...) */
   commandItems?: Array<MenuCommandItem<GridMenuCommandItemCallbackArgs, GridMenuCallbackArgs> | 'divider'>;
 
   /** Defaults to 0 (auto), minimum width of grid menu content (command, column list) */
   contentMinWidth?: number;
-
-  /** @deprecated @use `commandItems` Array of Custom Items (title, command, disabled, ...) */
-  customItems?: Array<MenuCommandItem<GridMenuCommandItemCallbackArgs, GridMenuCallbackArgs> | 'divider'>;
-
-  /** @deprecated @use `commandTitle` Defaults to "Commands" which is the title that shows up over the custom commands list */
-  customTitle?: string;
-
-  /** @deprecated @use `commandTitleKey` Same as "customTitle", except that it's a translation key which can be used on page load and/or when switching locale */
-  customTitleKey?: string;
 
   /** Defaults to "Columns" which is the title that shows up over the columns */
   columnTitle?: string;
@@ -106,12 +97,6 @@ export interface GridMenuOption {
   /** icon for the "Export to Text Delimited" command */
   iconExportTextDelimitedCommand?: string;
 
-  /**
-   * @deprecated @use `iconCssClass`
-   * URL pointing to the displaying the Grid menu icon image (basically the hamburger menu).
-   */
-  iconImage?: string;
-
   /** icon for the "Refresh Dataset" command */
   iconRefreshDatasetCommand?: string;
 
@@ -148,6 +133,9 @@ export interface GridMenuOption {
   /** Defaults to true, allows the user to control if the default gridMenu button (located on the top right corner by default CSS) should be created or omitted */
   showButton?: boolean;
 
+  /** Defaults to True, should we show bullets when icons are missing? */
+  showBulletWhenIconMissing?: boolean;
+
   /** Defaults to "Synchronous resize" which is 1 of the last 2 checkbox title shown at the end of the picker list */
   syncResizeTitle?: string;
 
@@ -156,7 +144,7 @@ export interface GridMenuOption {
 
   /**
    * Width (alias to `menuWidth`) that the drop menu can have.
-   * NOTE: the menu also has a "min-width" defined in CSS/SASS and setting a "width" below that threshold won't work, you change this min-width via SASS `$context-menu-min-width`
+   * NOTE: the menu also has a "min-width" defined in CSS/SASS and setting a "width" below that threshold won't work, you change this min-width via SASS `$slick-menu-min-width`
    */
   width?: number | string;
 
