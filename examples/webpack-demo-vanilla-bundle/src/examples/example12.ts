@@ -27,7 +27,6 @@ import { CompositeEditor, SlickCompositeEditorComponent } from '@slickgrid-unive
 import * as DOMPurify from 'dompurify';
 
 import { ExampleGridOptions } from './example-grid-options';
-import '../salesforce-styles.scss';
 import './example12.scss';
 
 // using external SlickGrid JS libraries
