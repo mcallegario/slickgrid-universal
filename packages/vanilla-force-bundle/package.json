@@ -1,6 +1,6 @@
 {
   "name": "@slickgrid-universal/vanilla-force-bundle",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Vanilla Slick Grid Bundle (mostly exist for our Salesforce implementation) - Similar to Vanilla Bundle, the only difference is that it adds extra packages within its bundle (CustomTooltip, CompositeEditor & TextExport)",
   "main": "dist/commonjs/index.js",
   "browser": "src/index.ts",
@@ -16,12 +16,12 @@
   "scripts": {
     "test": "echo testing slickgrid-universal vanilla-force-bundle code",
     "dev": "webpack --env development",
-    "dev:watch": "run-p build:watch",
+    "dev:watch": "run-p build:watch --npm-path npm",
     "build": "cross-env tsc --build",
     "postbuild": "npm run bundle:commonjs",
     "build:watch": "cross-env tsc --incremental --watch",
     "prebundle": "npm run delete:dist",
-    "bundle": "npm-run-all bundle:commonjs bundle:esm webpack:prod",
+    "bundle": "npm-run-all bundle:commonjs bundle:esm webpack:prod --npm-path npm",
     "bundle:commonjs": "tsc --project tsconfig.bundle.json --outDir dist/commonjs --module commonjs",
     "bundle:esm": "cross-env tsc --project tsconfig.bundle.json --outDir dist/esm --module esnext --target es2018",
     "prebundle:zip": "npm run delete:zip",
@@ -46,8 +46,8 @@
     "url": "https://github.com/ghiscoding/slickgrid-universal/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=6.14.8"
+    "node": ">=16.11.0",
+    "npm": ">=8.0.0"
   },
   "browserslist": [
     "last 2 version",
@@ -55,15 +55,15 @@
     "not dead"
   ],
   "dependencies": {
-    "@slickgrid-universal/common": "^1.1.0",
-    "@slickgrid-universal/composite-editor-component": "^1.1.1",
-    "@slickgrid-universal/custom-footer-component": "^1.1.1",
-    "@slickgrid-universal/custom-tooltip-plugin": "^1.1.1",
-    "@slickgrid-universal/empty-warning-component": "^1.1.1",
-    "@slickgrid-universal/event-pub-sub": "^1.1.1",
-    "@slickgrid-universal/pagination-component": "^1.1.1",
-    "@slickgrid-universal/text-export": "^1.1.1",
-    "@slickgrid-universal/vanilla-bundle": "^1.1.1",
+    "@slickgrid-universal/common": "^1.2.1",
+    "@slickgrid-universal/composite-editor-component": "^1.2.1",
+    "@slickgrid-universal/custom-footer-component": "^1.2.1",
+    "@slickgrid-universal/custom-tooltip-plugin": "^1.2.1",
+    "@slickgrid-universal/empty-warning-component": "^1.2.1",
+    "@slickgrid-universal/event-pub-sub": "^1.2.1",
+    "@slickgrid-universal/pagination-component": "^1.2.1",
+    "@slickgrid-universal/text-export": "^1.2.1",
+    "@slickgrid-universal/vanilla-bundle": "^1.2.1",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
@@ -71,9 +71,9 @@
     "archiver": "^5.3.0",
     "cross-env": "^7.0.3",
     "dts-bundle-webpack": "^1.0.2",
-    "html-loader": "^3.0.1",
+    "html-loader": "^3.1.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "webpack": "^5.65.0"
+    "webpack": "^5.68.0"
   }
 }

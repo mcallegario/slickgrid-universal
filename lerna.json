@@ -1,16 +1,17 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "version": "1.2.1",
   "npmClient": "yarn",
+  "loglevel": "info",
   "useWorkspaces": true,
-  "version": "1.1.1",
   "command": {
     "publish": {
       "conventionalCommits": true
     },
     "version": {
-      "message": "chore(release): publish new version"
+      "conventionalCommits": true,
+      "createRelease": "github",
+      "message": "chore(release): publish new version %v",
+      "gitDryRun": false
     }
   }
 }

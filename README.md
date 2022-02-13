@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-blueviolet)](https://github.com/ghiscoding/lerna-lite)
 [![NPM downloads](https://img.shields.io/npm/dy/@slickgrid-universal/common.svg)](https://www.npmjs.com/package/@slickgrid-universal/common)
 
 [![Actions Status](https://github.com/ghiscoding/slickgrid-universal/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/slickgrid-universal/actions)
@@ -10,7 +10,7 @@
 [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
 [![codecov](https://codecov.io/gh/ghiscoding/slickgrid-universal/branch/master/graph/badge.svg)](https://codecov.io/gh/ghiscoding/slickgrid-universal)
 
-This is a monorepo project (using Lerna) which is regrouping a few packages under a single repository. It is using SlickGrid (more specifically the [6pac/SlickGrid](https://github.com/6pac/SlickGrid/) fork) behind the scene (there is no need to rewrite the core library itself, in other words this is a wrapper library). The main goal of this library is to create a common repo that includes all Editors, Filters, Extensions and Services that could be used by any Framework (it is framework agnostic). It's also a good opportunity to decouple some features/services that not every project require at all time, this will also help in getting smaller bundle size depending on which features (packages) you use. For example, not every project requires backend services (OData, GraphQL) and export services (Excel Export, Text Export), which is why they are better handled with a monorepo structure.
+This is a monorepo project (using yarn workspaces) which is regrouping a few packages under a single repository. It is using SlickGrid (more specifically the [6pac/SlickGrid](https://github.com/6pac/SlickGrid/) fork) behind the scene (there is no need to rewrite the core library itself, in other words this is a wrapper library). The main goal of this library is to create a common repo that includes all Editors, Filters, Extensions and Services that could be used by any Framework (it is framework agnostic). It's also a good opportunity to decouple some features/services that not every project require at all time, this will also help in getting smaller bundle size depending on which features (packages) you use. For example, not every project requires backend services (OData, GraphQL) and export services (Excel Export, Text Export), which is why they are better handled with a monorepo structure.
 
 ## Latest News & Releases
 Check out the [Releases](https://github.com/ghiscoding/slickgrid-universal/releases) section for all latest News & Version Releases.
@@ -20,6 +20,11 @@ The GitHub [demo page](https://ghiscoding.github.io/slickgrid-universal) uses 2 
 - [Angular-Slickgrid](https://ghiscoding.github.io/Angular-Slickgrid/) - External Library
 - [Aurelia-Slickgrid](https://ghiscoding.github.io/aurelia-slickgrid/) - External Library
 - [Webpack-Demo-Vanilla-Bundle](https://ghiscoding.github.io/slickgrid-universal) - internal with Material Design theme & Salesforce themes
+
+### Like my work? 
+You could :star: the lib and maybe support me with cafeine :coffee:. Thanks.
+
+[![ko-fi](https://img.shields.io/badge/Buy%20me%20a%20Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white&text=Buy)](https://ko-fi.com/N4N679OT)
 
 ### Why create this monorepo?
 You might be wondering why was this monorepo created? Here are a few of the reasons:
@@ -70,32 +75,26 @@ Slickgrid-Universal has **100%** Unit Test Coverage, we are talking about +15,00
 | [@slickgrid-universal/vanilla-force-bundle](https://github.com/ghiscoding/slickgrid-universal/tree/master/packages/vanilla-force-bundle) | [![npm](https://img.shields.io/npm/v/@slickgrid-universal/vanilla-force-bundle.svg?color=forest)](https://www.npmjs.com/package/@slickgrid-universal/vanilla-force-bundle) | Vanilla TypeScript/ES6 for Salesforce implementation | [changelog](https://github.com/ghiscoding/slickgrid-universal/blob/master/packages/vanilla-force-bundle/CHANGELOG.md) 
 
 ## Installation
-**NOTE:** the installation instructions below are **only** required if you want to contribute to this project, if on the other hand you just want to use Slickgrid-Universal then take a look at [webpack-demo-vanilla-bundle](https://github.com/ghiscoding/slickgrid-universal/tree/master/examples/webpack-demo-vanilla-bundle)
+**NOTE:** the installation instructions below are **only** required if you want to contribute to this project, if on the other hand you just want to do a quick demo and use Slickgrid-Universal then take a look at [webpack-demo-vanilla-bundle](https://github.com/ghiscoding/slickgrid-universal/tree/master/examples/webpack-demo-vanilla-bundle). There is no need to clone and install the entire library, just create an empty project with the content of [webpack-demo-vanilla-bundle](https://github.com/ghiscoding/slickgrid-universal/tree/master/examples/webpack-demo-vanilla-bundle) (perhaps clone it and copy only that folder to an empty project would be the easiest).
 
-To get going and do development with this monorepo, you will need to clone the repo and then follow the steps below.
+To get going and do development with this monorepo, you will need to clone the repo and then follow the steps below. You must be at the root of your project to run the following commands.
 
 1. Install npm packages with [Yarn classic 1.x](https://classic.yarnpkg.com/lang/en/) since this lib uses Yarn version 1.x Workspaces and so you need to use Yarn to install all packages
 ```bash
+# from the root
 yarn install
 ```
 
-2. Lerna Bootstrap
+2. Build (bundle)
 
-Run it **only once**, this will install all dependencies and add necessary monorepo symlinks
-```bash
-yarn run bootstrap
-```
-
-3. Build (bundle)
-
-To get started you must run at least once the initial TS build so that all necessary `dist` are created and bundled for all the Lerna packages to work together.
+To get started you must run at least once the initial TS build so that all necessary `dist` are created and bundled for all the workspace packages to work together.
 
 ```bash
 yarn run bundle
 ```
 NOTE: this will also have to be re-executed if you change any of the interfaces in the `common` package (since that package is a dependency of all other packages).
 
-4. Run Dev (Vanilla Implementation)
+3. Run Dev (Vanilla Implementation)
 
 There is a Vanilla flavour implementation of this monorepo, vanilla means that it is not associated to any framework
 and is written in plain TypeScript without being bound to any framework. The implementation is very similar to Angular and Aurelia.
@@ -106,7 +105,7 @@ yarn run dev:watch
 ```
 
 ### Tests
-You must go through Installation Steps 1-3 prior to run the unit tests OR Steps 1-4 when running E2E tests.
+You must go through Installation Steps 1-2 prior to run the unit tests OR Steps 1-3 when running E2E tests.
 
 #### Jest Unit Tests
 To run all unit tests (with Jest), you can run these commands
